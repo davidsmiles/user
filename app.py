@@ -11,8 +11,8 @@ from ma import ma
 
 # Resources
 from resources.confirmation import Confirmation, ConfirmationByUser
-from resources.signup import UserSignUp
-from resources.login import UserLogin
+from resources.signup import AccountSignUp
+from resources.login import AccountLogin
 from resources.user import User
 from resources.useridentity import UserIdentity
 from resources.users import Users
@@ -41,10 +41,10 @@ api.add_resource(Users, '/users')
 api.add_resource(UserIdentity, '/users/identify/<string:user_id>')
 
 # Account
-api.add_resource(UserSignUp, '/accounts/signup')
-api.add_resource(UserLogin, '/accounts/login')
-api.add_resource(Confirmation, '/accounts/confirm/<string:confirmation_id>')
-api.add_resource(ConfirmationByUser, '/accounts/confirm/user/<string:user_id>')
+api.add_resource(AccountSignUp, '/accounts/signup')
+api.add_resource(AccountLogin, '/accounts/login')
+api.add_resource(Confirmation, '/accounts/confirmation/<string:confirmation_id>')
+api.add_resource(ConfirmationByUser, '/accounts/confirmation/user/<string:user_id>')
 
 
 if __name__ == '__main__':

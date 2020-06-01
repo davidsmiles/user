@@ -62,9 +62,16 @@ class UserModel(db.Model):
     @classmethod
     def is_login_valid(cls, user, password):
         # Check if user exists and validate password
-        if user and check_password_hash(user.password, password):
+        if check_password_hash(user.password, password):
             return True
         return False
+
+    def send_confirmation_email(self):
+        link = request.url_root[0:-1] + url_for('confirmation', confirmation_id=self.most_recent_confirmation.id)
+        subject = gettext("confirm_your_account")
+        text = gettext("confirm_mail_message").format(link)
+
+        return Sendmail.send_email(self.email, subject, text)
 
     def save_to_db(self):
         db.session.add(self)

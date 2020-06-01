@@ -13,7 +13,7 @@ from schemas.user import UserSchema
 user_schema = UserSchema(unknown=INCLUDE)
 
 
-class UserSignUp(Resource):
+class AccountSignUp(Resource):
     @classmethod
     def post(cls):
         # Get the Json payload
