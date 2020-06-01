@@ -9,11 +9,7 @@ from flask_restful import Api
 from db import db
 from ma import ma
 
-# Models
-from models.profile import Profile
-
 # Resources
-from resources.profile import Profile
 from resources.signup import UserSignUp
 from resources.login import UserLogin
 from resources.user import User
@@ -37,16 +33,15 @@ jwt = JWTManager(app)
 def create_all():
     db.create_all()
 
-    
+
 # User
 api.add_resource(User, '/users/<string:user_id>')
 api.add_resource(Users, '/users')
-api.add_resource(UserSignUp, '/users/signup')
-api.add_resource(UserLogin, '/users/login')
 api.add_resource(UserIdentity, '/users/identify/<string:user_id>')
 
-# Profile
-api.add_resource(Profile, '/users/<string:user_id>/profile')
+# Account
+api.add_resource(UserSignUp, '/accounts/signup')
+api.add_resource(UserLogin, '/accounts/login')
 
 
 if __name__ == '__main__':

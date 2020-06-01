@@ -1,4 +1,4 @@
-from time import time
+from datetime import datetime
 from typing import List
 from uuid import uuid4
 
@@ -14,12 +14,20 @@ class UserModel(db.Model):
     user_id = db.Column(db.String(40))
     email = db.Column(db.String(80), nullable=True, unique=True)
     password = db.Column(db.String(100), nullable=True)
-
-    profile = db.relationship('Profile', uselist=False)
+    firstname = db.Column(db.String(80))
+    lastname = db.Column(db.String(80))
+    phonenumber = db.Column(db.String(15))
+    address = db.Column(db.String(80))
+    age = db.Column(db.Integer)
+    date_joined = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.user_id = uuid4().hex
+    
+    @property
+    def fullname(self):
+        return f'{self.firstname} {self.lastname}'.title()
 
     @classmethod
     def find_by_id(cls, _id) -> "UserModel":

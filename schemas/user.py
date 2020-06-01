@@ -7,5 +7,3 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
         model = UserModel
         load_instance = True
         load_only = ('password', 'id')
-
-    profile = ma.URLFor("profile", user_id="<id>")

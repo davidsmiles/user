@@ -6,7 +6,6 @@ from marshmallow import INCLUDE
 from werkzeug.security import generate_password_hash
 
 from libs.strings import gettext
-from models.profile import Profile
 from models.usermodel import UserModel
 from schemas.user import UserSchema
 
@@ -28,19 +27,11 @@ class UserSignUp(Resource):
             user.password = generate_password_hash(user.password)
             user.save_to_db()
 
-            # Create a User Profile
-            del(data['email'])
-            del(data['password'])
-
-            profile = Profile(**data)
-            user.profile = profile
-
-            profile.save_to_db()
             return user_schema.dump(user), 200
         except:
             traceback.print_exc()
             user.delete_from_db()
             return {
-                       'message': gettext("user_error_creating"),
-                       'code': 500
-                   }, 500
+                'message': gettext("user_error_creating"),
+                'code': 500
+            }, 500

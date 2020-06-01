@@ -20,6 +20,18 @@ class User(Resource):
         return user_schema.dump(user), 200
 
     @classmethod
+    def put(cls, user_id):
+        user = UserModel.find_by_id(user_id)
+        if not user:
+            return {
+                   'message': gettext('user_not_found'),
+                   'code': 404
+               }, 404
+
+        user.update(request.get_json())
+        return user_schema.dump(user), 200
+
+    @classmethod
     def delete(cls, user_id):
         user = UserModel.find_by_id(user_id)
         if not user:
