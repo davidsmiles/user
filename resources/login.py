@@ -1,0 +1,38 @@
+import datetime
+
+from flask import request
+from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_restful import Resource
+from marshmallow import EXCLUDE
+
+from libs.strings import gettext
+from models.usermodel import UserModel
+from schemas.user import UserSchema
+
+user_schema = UserSchema(unknown=EXCLUDE)
+
+
+class UserLogin(Resource):
+    @classmethod
+    def post(cls):
+        data = request.get_json()
+        user = user_schema.load(data, partial=('email', 'password'))
+
+        user = UserModel.find_by_email(user.email)
+        if UserModel.is_login_valid(user, data['password']):
+            expires = datetime.timedelta(seconds=2000)  # 1 Hour
+            access_token = create_access_token(
+                identity=user.user_id,
+                fresh=True,
+                expires_delta=expires)
+            refresh_token = create_refresh_token(identity=user.user_id)
+
+            return {
+                       'access_token': access_token,
+                       'refresh_token': refresh_token
+                   }, 200
+
+        return {
+               'message': gettext("user_invalid_credentials"),
+               'code': 401
+               }, 401
