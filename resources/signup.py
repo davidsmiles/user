@@ -6,6 +6,7 @@ from marshmallow import INCLUDE
 from werkzeug.security import generate_password_hash
 
 from libs.strings import gettext
+from models.confirmation import ConfirmationModel
 from models.usermodel import UserModel
 from schemas.user import UserSchema
 
@@ -26,6 +27,12 @@ class UserSignUp(Resource):
         try:
             user.password = generate_password_hash(user.password)
             user.save_to_db()
+            
+            # Send a Confirmation Email
+            confirmation = ConfirmationModel(user.id)
+            # confirmation.confirmed = True
+            confirmation.save_to_db()
+            # user.send_confirmation_email()
 
             return user_schema.dump(user), 200
         except:

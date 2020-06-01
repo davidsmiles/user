@@ -8,5 +8,11 @@
     "user_not_confirmed": "You have not confirmed registration, please check your email <{}>.",
     "user_error_creating": "Internal server error. Failed to create user.",
     "user_registered": "Account created successfully, an email with an activation link has been sent to your email address, please check.",
-    "user_profile_updated": "Profile update successfully"
+    "user_profile_updated": "Profile update successfully",
+
+    "confirmation_not_found": "Confirmation reference not found.",
+    "confirmation_link_expired": "The link has expired.",
+    "confirmation_already_confirmed": "Registration has already been confirmed.",
+    "confirmation_resend_fail": "Internal server error. Failed to resend confirmation email.",
+    "confirmation_resend_successful": "E-mail confirmation successfully re-sent."
   }

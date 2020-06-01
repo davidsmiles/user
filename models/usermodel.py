@@ -5,6 +5,7 @@ from uuid import uuid4
 from werkzeug.security import check_password_hash
 
 from db import db
+from models.confirmation import ConfirmationModel
 
 
 class UserModel(db.Model):
@@ -21,9 +22,17 @@ class UserModel(db.Model):
     age = db.Column(db.Integer)
     date_joined = db.Column(db.DateTime, default=datetime.utcnow)
 
+    confirmation = db.relationship(
+        "ConfirmationModel", lazy="dynamic", cascade="all, delete-orphan"
+    )
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.user_id = uuid4().hex
+
+    @property
+    def most_recent_confirmation(self) -> "ConfirmationModel":
+        return self.confirmation.order_by(db.desc(ConfirmationModel.expire_at)).first()
     
     @property
     def fullname(self):
