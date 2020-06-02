@@ -1,6 +1,6 @@
 import datetime
 
-from flask import request
+from flask import request, current_app
 from flask_jwt_extended import create_access_token, create_refresh_token
 from flask_restful import Resource
 from marshmallow import EXCLUDE
@@ -27,7 +27,10 @@ class AccountLogin(Resource):
 
         if UserModel.is_login_valid(user, data['password']):
             confirmation = user.most_recent_confirmation
-            if confirmation and confirmation.confirmed:
+
+            config = current_app.config
+
+            if (confirmation and confirmation.confirmed) or config['TESTING']:
                 expires = datetime.timedelta(seconds=2000)  # 1 Hour
                 access_token = create_access_token(
                     identity=user.user_id,

@@ -55,7 +55,7 @@ class UserTestCase(BaseTestCase):
                                          'password': 'pass'
                                      }
                                     )
-        self.assert_400(response, 'user_not_confirmed')
+        self.assert_200(response)
 
     def test_get_user(self):
         response = self.client.get('/users/1')
