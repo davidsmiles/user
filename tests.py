@@ -39,7 +39,7 @@ class UserTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_user_signup(self):
-        response = self.client.post('/users/signup',
+        response = self.client.post('/accounts/signup',
                                     json={
                                         'firstname': 'david',
                                         'lastname': 'smiles',
@@ -49,13 +49,13 @@ class UserTestCase(BaseTestCase):
         self.assert_200(response)
 
     def test_user_login(self):
-        response = self.client.post('/users/login',
+        response = self.client.post('/accounts/login',
                                     json={
                                          'email': 'ugberodavid@gmail.com',
                                          'password': 'pass'
                                      }
                                     )
-        self.assert_200(response)
+        self.assert_400(response, 'user_not_confirmed')
 
     def test_get_user(self):
         response = self.client.get('/users/1')
@@ -68,15 +68,15 @@ class UserTestCase(BaseTestCase):
                                         'lastname': 'smiles'
                                      }
                                     )
-        self.assert_200(response)
+        self.assertStatus(response, 200)
 
     def test_delete_user(self):
         response = self.client.delete('/users/1')
-        self.assert200(response)
+        self.assertStatus(response, 204)
 
     def test_get_all_users(self):
         response = self.client.get('/users')
-        self.assert200(response)
+        self.assert_200(response)
 
 
 if __name__ == '__main__':

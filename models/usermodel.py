@@ -20,7 +20,11 @@ class UserModel(db.Model):
     phonenumber = db.Column(db.String(15))
     address = db.Column(db.String(80))
     age = db.Column(db.Integer)
-    date_joined = db.Column(db.DateTime, default=datetime.utcnow)
+    confirmed_at = db.Column(db.DateTime())
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationships
+    # roles = db.relationship('Role', secondary='user_roles', backref=db.backref('users', lazy='dynamic'))
 
     confirmation = db.relationship(
         "ConfirmationModel", lazy="dynamic", cascade="all, delete-orphan"

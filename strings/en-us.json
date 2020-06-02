@@ -9,6 +9,7 @@
     "user_error_creating": "Internal server error. Failed to create user.",
     "user_registered": "Account created successfully, an email with an activation link has been sent to your email address, please check.",
     "user_profile_updated": "Profile update successfully",
+    "user_confirmed": "Confirmed",
 
     "confirmation_not_found": "Confirmation reference not found.",
     "confirmation_link_expired": "The link has expired.",

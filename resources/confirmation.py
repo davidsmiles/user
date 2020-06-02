@@ -1,4 +1,6 @@
 import traceback
+
+from datetime import datetime
 from time import time
 
 from flask import render_template, make_response
@@ -25,6 +27,7 @@ class Confirmation(Resource):
             return {"message": gettext("confirmation_already_confirmed")}, 400
 
         confirmation.confirmed = True
+        confirmation.user.confirmed_at = datetime.utcnow()
         confirmation.save_to_db()
 
         headers = {"Content-Type": "text/html"}
@@ -34,7 +37,7 @@ class Confirmation(Resource):
         #     headers
         # )
 
-        return 'success', 200
+        return {'message': gettext("user_confirmed")}, 200
 
 
 confirmation_schema = ConfirmationSchema(many=True)
