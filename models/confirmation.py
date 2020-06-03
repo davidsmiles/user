@@ -1,7 +1,7 @@
 from time import time
 from uuid import uuid4
 
-from db import db
+from extensions import db
 
 
 CONFIRMATION_EXPIRATION_DELTA = 2000  # 1 hour

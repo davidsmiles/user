@@ -31,7 +31,7 @@ class AccountLogin(Resource):
             config = current_app.config
 
             if (confirmation and confirmation.confirmed) or config['TESTING']:
-                expires = datetime.timedelta(seconds=2000)  # 1 Hour
+                expires = datetime.timedelta(seconds=84000)  # 1 Day
                 access_token = create_access_token(
                     identity=user.user_id,
                     fresh=True,

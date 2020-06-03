@@ -4,7 +4,7 @@ from uuid import uuid4
 
 from werkzeug.security import check_password_hash
 
-from db import db
+from extensions import db
 from models.confirmation import ConfirmationModel
 
 

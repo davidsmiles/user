@@ -2,7 +2,7 @@ import unittest
 
 from flask_testing import TestCase
 from app import app
-from db import db
+from extensions import db
 
 from werkzeug.security import generate_password_hash
 

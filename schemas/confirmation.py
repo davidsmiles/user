@@ -1,4 +1,4 @@
-from ma import ma
+from extensions import ma
 from models.confirmation import ConfirmationModel
 
 
