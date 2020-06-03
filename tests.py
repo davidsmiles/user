@@ -1,12 +1,19 @@
 import unittest
 
 from flask_testing import TestCase
-from app import app
-from extensions import db
-
 from werkzeug.security import generate_password_hash
 
+
+from app import app, api
+from extensions import *
+
 from models.usermodel import UserModel
+from resources.routes import initialize_routes
+
+
+# Initialize
+initialize_extensions(app)
+initialize_routes(api)
 
 
 class BaseTestCase(TestCase):
