@@ -1,11 +1,11 @@
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
+from flask_bcrypt import Bcrypt
+from flask_mongoengine import MongoEngine
 
 
-db = SQLAlchemy()
-ma = Marshmallow()
+bcrypt = Bcrypt()
+db = MongoEngine()
 
 
 def initialize_extensions(app):
+    bcrypt.init_app(app)
     db.init_app(app)
-    ma.init_app(app)

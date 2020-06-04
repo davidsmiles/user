@@ -17,6 +17,8 @@ Flask-SQLAlchemy = "*"
 flask-testing = "*"
 pylint = "*"
 python-dotenv = "*"
+flask-mongoengine = "*"
+flask-bcrypt = "*"
 
 [requires]
 python_version = "3.6"

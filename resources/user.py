@@ -1,44 +1,53 @@
-from flask import request
+from flask import request, Response
 from flask_restful import Resource
 
-from libs.strings import gettext
-from models.usermodel import UserModel
-from schemas.user import UserSchema
+from mongoengine.errors import DoesNotExist, InvalidQueryError
 
-user_schema = UserSchema()
+from database.models import Users
+from libs.strings import gettext
 
 
 class User(Resource):
+    
     @classmethod
-    def get(cls, user_id):
-        user = UserModel.find_by_id(user_id)
-        if not user:
+    def get(cls, id):
+        try:
+            user = Users.objects.get(id=id)
+        except DoesNotExist:
             return {
                    'message': gettext('user_not_found'),
                    'code': 404
             }, 404
-        return user_schema.dump(user), 200
+        return Response(user.to_json(), mimetype="application/json", status=200)
 
     @classmethod
-    def put(cls, user_id):
-        user = UserModel.find_by_id(user_id)
-        if not user:
+    def put(cls, id):
+        data = request.get_json()
+        try:
+            user = Users.objects.get(id=id)
+            user.update(**data)
+        except DoesNotExist:
             return {
                    'message': gettext('user_not_found'),
                    'code': 404
-               }, 404
-
-        user.update(request.get_json())
-        return user_schema.dump(user), 200
+            }, 404
+        except InvalidQueryError:
+            return {
+                   'message': gettext('unexpected_user_data'),
+                   'code': 400
+            }, 400
+        return "OK", 200
 
     @classmethod
-    def delete(cls, user_id):
-        user = UserModel.find_by_id(user_id)
-        if not user:
+    def delete(cls, id):
+        user = request.get_json()
+        try:
+            user = Users.objects.get(id=id)
+            user.delete()
+        except DoesNotExist:
             return {
                 'message': gettext('user_not_found'),
                 'code': 404
             }, 404
 
-        user.delete_from_db()
         return {}, 204

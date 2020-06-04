@@ -18,11 +18,6 @@ api = Api(app)
 jwt = JWTManager(app)
 
 
-@app.before_first_request
-def create_all():
-    db.create_all()
-
-
 if __name__ == '__main__':
     initialize_extensions(app)
     initialize_routes(api)

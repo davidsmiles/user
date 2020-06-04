@@ -1,16 +1,9 @@
-import traceback
-
 from flask import request
 from flask_restful import Resource
-from marshmallow import INCLUDE
-from werkzeug.security import generate_password_hash
 
+from database.models import Users
 from libs.strings import gettext
-from models.confirmation import ConfirmationModel
-from models.usermodel import UserModel
-from schemas.user import UserSchema
-
-user_schema = UserSchema(unknown=INCLUDE)
+from mongoengine.errors import NotUniqueError
 
 
 class AccountSignUp(Resource):
@@ -19,26 +12,16 @@ class AccountSignUp(Resource):
         # Get the Json payload
         data = request.get_json()
         # Load it into a User object
-        user = user_schema.load(data)
-
-        if UserModel.find_by_email(user.email):
-            return {'message': gettext("user_username_exists")}, 302
+        user = Users(**data)
 
         try:
-            user.password = generate_password_hash(user.password)
-            user.save_to_db()
+            user.hash_password()
+            user.save()
+            _id = user.id
             
-            # Send a Confirmation Email
-            confirmation = ConfirmationModel(user.id)
-            # confirmation.confirmed = True
-            confirmation.save_to_db()
-            # user.send_confirmation_email()
-
-            return user_schema.dump(user), 200
-        except:
-            traceback.print_exc()
-            user.delete_from_db()
+            return {'id': str(_id)}, 200
+        except NotUniqueError:
             return {
-                'message': gettext("user_error_creating"),
-                'code': 500
-            }, 500
+                'message': gettext("user_username_exists"),
+                'code': 400
+            }, 400

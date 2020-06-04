@@ -18,5 +18,7 @@
     "confirmation_resend_successful": "E-mail confirmation successfully re-sent.",
 
     "confirm_your_account": "Confirm your bla bla Account",
-    "confirm_mail_message": "To finish creating your bla bla account, confirm your email address by clicking this link:\n\n {}"
+    "confirm_mail_message": "To finish creating your bla bla account, confirm your email address by clicking this link:\n\n {}",
+
+    "unexpected_user_data": "check check check"
 }
