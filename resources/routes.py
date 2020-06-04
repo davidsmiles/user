@@ -1,4 +1,5 @@
 # Resources
+from resources.address import Address
 from resources.signup import AccountSignUp
 from resources.login import AccountLogin
 from resources.user import User
@@ -11,5 +12,6 @@ def initialize_routes(api):
     api.add_resource(AllUsers, '/users')
 
     # Account
-    api.add_resource(AccountSignUp, '/accounts/signup')
-    api.add_resource(AccountLogin, '/accounts/login')
+    api.add_resource(AccountSignUp, '/account/register')
+    api.add_resource(AccountLogin, '/account/login')
+    api.add_resource(Address, '/account/addresses')

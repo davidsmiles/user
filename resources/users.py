@@ -5,6 +5,7 @@ from database.models import Users
 
 
 class AllUsers(Resource):
+
     @classmethod
     def get(cls):
         users = Users.objects().to_json()
