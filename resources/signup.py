@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 
 from database.models import Users
+from libs.errors import *
 from libs.strings import gettext
 from mongoengine.errors import NotUniqueError
 
@@ -21,7 +22,4 @@ class AccountSignUp(Resource):
             
             return {'id': str(_id)}, 200
         except NotUniqueError:
-            return {
-                'message': gettext("user_username_exists"),
-                'code': 400
-            }, 400
+            raise UserEmailExists

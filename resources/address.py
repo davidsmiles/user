@@ -5,6 +5,7 @@ from flask_restful import Resource
 from mongoengine.errors import DoesNotExist, InvalidQueryError
 
 from database.models import Users
+from libs.errors import *
 from libs.strings import gettext
 
 
@@ -36,16 +37,10 @@ class Address(Resource):
             user.update(push__address=data.get('address'))
             user.save()
         except DoesNotExist:
-            return {
-                   'message': gettext('user_not_found'),
-                   'code': 404
-            }, 404
+            raise UserNotExist
         except InvalidQueryError:
-            return {
-                   'message': gettext('unexpected_user_data'),
-                   'code': 400
-            }, 400
-        return "OK", 200
+            raise QueryInvalidError
+        return {}, 200
 
     @classmethod
     def put(cls, id):

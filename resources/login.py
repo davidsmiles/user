@@ -7,6 +7,7 @@ from flask_restful import Resource
 from mongoengine.errors import DoesNotExist
 
 from database.models import Users
+from libs.errors import UserNotExist, UnauthorizedError
 from libs.strings import gettext
 
 
@@ -20,10 +21,7 @@ class AccountLogin(Resource):
             authorized = user.check_password(data.get('password'))
 
             if not authorized:
-                return {
-                    'message': gettext("user_invalid_credentials"),
-                    'status': 401
-               }, 401
+                raise UnauthorizedError
             
             expires = datetime.timedelta(days=7)  # 7 Day
             access_token = create_access_token(
@@ -38,7 +36,4 @@ class AccountLogin(Resource):
             }, 200
 
         except DoesNotExist:
-            return {
-                   'message': gettext('user_not_found'),
-                   'status': 404
-               }, 404
+            raise UserNotExist
