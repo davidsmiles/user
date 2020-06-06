@@ -13,7 +13,7 @@ class User(Resource):
     @classmethod
     def get(cls, id):
         try:
-            user = Users.objects(id=id)
+            user = Users.objects(id=id).first()
         except DoesNotExist:
             raise UserNotExist
         return Response(user.to_json(), mimetype="application/json", status=200)

@@ -17,12 +17,9 @@ class Address(Resource):
         _id = get_jwt_identity()
 
         try:
-            address = Users.objects(id=_id).only('address')
+            address = Users.objects(id=_id).only('address').first().address
         except DoesNotExist:
-            return {
-                   'message': gettext('user_not_found'),
-                   'code': 404
-            }, 404
+            raise UserNotExist
 
         return jsonify(address)
 
@@ -54,12 +51,22 @@ class Address(Resource):
 
         try:
             user = Users.objects(id=_id)
+
+            count = len(user.first().address)
+
+            if int(position) >= count or int(position) <= 0:
+                return {
+                    "message": gettext('out_of_list_index'),
+                    "status": 400
+                }
+
             user.update_one(**{f'set__address__{position}': address})
         except DoesNotExist:
             raise UserNotExist
         except InvalidQueryError:
             raise InvalidQueryError
         return {}, 200
+
 
     @classmethod
     def delete(cls):

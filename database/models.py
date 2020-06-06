@@ -23,7 +23,7 @@ class Users(db.Document):
     lastname = db.StringField(required=True)
     email = db.EmailField(required=True, unique=True)
     password = db.StringField(required=True, min_length=6)
-    create_at = db.DateTimeField(default=datetime.utcnow(),required=True)
+    created_at = db.DateTimeField(default=datetime.utcnow(),required=True)
     address = db.ListField(db.EmbeddedDocumentField(Address))
 
     def hash_password(self):

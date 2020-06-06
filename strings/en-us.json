@@ -11,6 +11,8 @@
     "user_profile_updated": "Profile update successfully",
     "user_confirmed": "Confirmed",
 
+    "out_of_list_index": "Position given is larger than actual list",
+
     "confirmation_not_found": "Confirmation reference not found.",
     "confirmation_link_expired": "The link has expired.",
     "confirmation_already_confirmed": "Registration has already been confirmed.",
