@@ -17,7 +17,7 @@ class Address(Resource):
         _id = get_jwt_identity()
 
         try:
-            address = Users.objects.get(id=_id).address
+            address = Users.objects(id=_id).only('address')
         except DoesNotExist:
             return {
                    'message': gettext('user_not_found'),
@@ -33,9 +33,8 @@ class Address(Resource):
 
         data = request.get_json()
         try:
-            user = Users.objects.get(id=_id)
+            user = Users.objects(id=_id)
             user.update(push__address=data.get('address'))
-            user.save()
         except DoesNotExist:
             raise UserNotExist
         except InvalidQueryError:
@@ -43,9 +42,23 @@ class Address(Resource):
         return {}, 200
 
     @classmethod
-    def put(cls, id):
-        pass
+    @jwt_required
+    def put(cls):
+        _id = get_jwt_identity()
+
+        data = request.get_json()
+        field = list(data.keys())[0]
+
+        try:
+            user = Users.objects(id=_id)
+            print(data[field])
+            user.update(**{f'set__address__{field}': [data[field]]})
+        except DoesNotExist:
+            raise UserNotExist
+        except InvalidQueryError:
+            raise QueryInvalidError
+        return {}, 200
 
     @classmethod
-    def delete(cls, id):
+    def delete(cls):
         pass

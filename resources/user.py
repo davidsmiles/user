@@ -13,7 +13,7 @@ class User(Resource):
     @classmethod
     def get(cls, id):
         try:
-            user = Users.objects.get(id=id)
+            user = Users.objects(id=id)
         except DoesNotExist:
             raise UserNotExist
         return Response(user.to_json(), mimetype="application/json", status=200)
@@ -22,7 +22,7 @@ class User(Resource):
     def put(cls, id):
         data = request.get_json()
         try:
-            user = Users.objects.get(id=id)
+            user = Users.objects(id=id)
             user.update(**data)
         except DoesNotExist:
             raise UserNotExist
@@ -34,7 +34,7 @@ class User(Resource):
     def delete(cls, id):
         user = request.get_json()
         try:
-            user = Users.objects.get(id=id)
+            user = Users.objects(id=id)
             user.delete()
         except DoesNotExist:
             return {
