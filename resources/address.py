@@ -34,7 +34,7 @@ class Address(Resource):
         data = request.get_json()
         try:
             user = Users.objects(id=_id)
-            user.update(push__address=data.get('address'))
+            user.update(push__address=data)
         except DoesNotExist:
             raise UserNotExist
         except InvalidQueryError:
@@ -46,17 +46,19 @@ class Address(Resource):
     def put(cls):
         _id = get_jwt_identity()
 
+        position = request.args['position']
         data = request.get_json()
-        field = list(data.keys())[0]
+
+        from database.models import Address
+        address = Address(**data)
 
         try:
             user = Users.objects(id=_id)
-            print(data[field])
-            user.update(**{f'set__address__{field}': [data[field]]})
+            user.update_one(**{f'set__address__{position}': address})
         except DoesNotExist:
             raise UserNotExist
         except InvalidQueryError:
-            raise QueryInvalidError
+            raise InvalidQueryError
         return {}, 200
 
     @classmethod
