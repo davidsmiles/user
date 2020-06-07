@@ -54,7 +54,7 @@ class Address(Resource):
 
             count = len(user.first().address)
 
-            if int(position) >= count or int(position) <= 0:
+            if int(position) >= count or int(position) < 0:
                 return {
                     "message": gettext('out_of_list_index'),
                     "status": 400
@@ -69,5 +69,27 @@ class Address(Resource):
 
 
     @classmethod
+    @jwt_required
     def delete(cls):
-        pass
+        _id = get_jwt_identity()
+
+        position = request.args['position']
+
+        try:
+            user = Users.objects(id=_id)
+            address = Users.objects(id=_id).only('address').first().address
+
+            count = len(user.first().address)
+
+            if int(position) >= count or int(position) < 0:
+                return {
+                    "message": gettext('out_of_list_index'),
+                    "status": 400
+                }
+
+            user.update_one(pull__address=address[int(position)])
+        except DoesNotExist:
+            raise UserNotExist
+        except InvalidQueryError:
+            raise InvalidQueryError
+        return {}, 200
